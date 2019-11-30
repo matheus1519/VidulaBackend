@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -55,8 +56,20 @@ public class UsuarioController {
             usuarios.deleteById(id);
             return true;
         }
-        
+
         return false;
+    }
+
+    @GetMapping("/usuario/{usuario}")
+    public Usuario buscaUsuario(@PathVariable String usuario) {
+        Usuario user = usuarios.findByEmailStartingWith(usuario);
+        if (user.equals("")) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Usuario não encontrado!"
+            );
+        }
+        else
+            return user;
     }
 
     @ExceptionHandler(Exception.class)
@@ -64,4 +77,5 @@ public class UsuarioController {
     public void handleError() {
     }
 
+    
 }
