@@ -70,6 +70,14 @@ public class UsuarioController {
         else
             return ResponseEntity.ok(user);
     }
+    
+    @GetMapping("/existe/{email}")
+    public boolean existe(@PathVariable String email) {
+        if(usuarios.findByEmail(email) == null)
+            return false;
+        else
+            return true;
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Erro interno")
