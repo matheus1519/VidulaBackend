@@ -61,28 +61,15 @@ public class UsuarioController {
         return false;
     }
 
-    @GetMapping("/usuario/{usuario}")
-    public ResponseEntity<Usuario> buscaUsuario(@PathVariable String usuario) {
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Usuario> buscaUsuario(@PathVariable String email) {
         Usuario user = null;
-        user = usuarios.findByEmailStartingWith(usuario);
-        if (user == null) 
+        user = usuarios.findByEmail(email);
+        if (user == null) {
             return ResponseEntity.notFound().build();
-        else
+        } else {
             return ResponseEntity.ok(user);
-    }
-    
-    @GetMapping("/existe/{email}")
-    public boolean existe(@PathVariable String email) {
-        if(usuarios.findByEmail(email) == null)
-            return false;
-        else
-            return true;
+        }
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Erro interno")
-    public void handleError() {
-    }
-
-    
 }

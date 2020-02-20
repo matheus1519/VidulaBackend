@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/videos")
@@ -44,9 +46,14 @@ public class VideoController {
     }
 
     @PostMapping
-    public boolean post(@RequestBody Video v) {
-        videos.save(v);
-        return true;
+    public String post(@RequestParam("1-principal") MultipartFile video, Video videoEntity) {
+        if(video.isEmpty()){
+            return "Video não carregado!";
+        }
+        
+        VideoFileController.salvarVideo(video, videoEntity);
+        videos.save(videoEntity);
+        return "Salvo com sucesso";
     }
 
     @DeleteMapping("/{id}")
