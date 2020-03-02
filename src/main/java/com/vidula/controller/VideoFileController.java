@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class VideoFileController {
 
-    @RequestMapping("/videos/{videoname}")
+    @RequestMapping("/videosview/{videoname}")
     public void videoView(HttpServletRequest req,
             HttpServletResponse res,
             @PathVariable("videoname") String videoName) {
@@ -27,7 +27,7 @@ public class VideoFileController {
 
         if (Files.exists(video)) {
             res.setHeader("Content-Disposition", "inline");
-            res.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
+            res.setContentType(MediaType.ALL_VALUE);
             try {
                 Files.copy(video, res.getOutputStream());
                 res.getOutputStream().flush();
@@ -43,7 +43,7 @@ public class VideoFileController {
             String name = Calendar.getInstance().getTimeInMillis() + videoFile.getOriginalFilename();
             videoFile.transferTo(Paths.get("C:\\Users\\1519m\\Pictures\\" + name));
 //            mv.addObject("path", context.getContextPath() +"/images/"+name);
-            video.setUrl("http://localhost:8080/videos/" + name);
+            video.setUrl("http://localhost:8080/videosview/" + name);
         } catch (Exception ex) {
             System.out.println(ex);
         }

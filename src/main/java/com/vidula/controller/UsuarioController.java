@@ -61,15 +61,17 @@ public class UsuarioController {
         return false;
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Usuario> buscaUsuario(@PathVariable String email) {
+    @GetMapping("/existe/{email}")
+    public ResponseEntity<Boolean> buscaUsuario(@PathVariable String email) {
         Usuario user = null;
         user = usuarios.findByEmail(email);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(false);
         } else {
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(true);
         }
     }
+    
+    
 
 }
