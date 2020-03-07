@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,7 @@ public class UsuarioController {
 
     @PostMapping
     public boolean cadastrar(@RequestBody Usuario u) {
+        u.cryptoPass();
         usuarios.save(u);
         return true;
     }
@@ -63,13 +65,28 @@ public class UsuarioController {
 
     @GetMapping("/existe/{email}")
     public ResponseEntity<Boolean> buscaUsuario(@PathVariable String email) {
-        Usuario user = null;
-        user = usuarios.findByEmail(email);
-        if (user == null) {
+        if(email.isEmpty()){
+            return ResponseEntity.ok(false);
+        }
+        Optional<Usuario> user = usuarios.findByEmail(email);
+        if (!user.isPresent()) {
             return ResponseEntity.ok(false);
         } else {
             return ResponseEntity.ok(true);
         }
+    }
+    
+    @PostMapping("/autenticar")
+    public boolean autenticar(@RequestBody Usuario u){
+        Optional<Usuario> uDb = usuarios.findByEmail(u.getEmail());
+        if (uDb.isPresent()){
+            if(uDb.get().matchPass(u.getSenha())){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
     }
     
     

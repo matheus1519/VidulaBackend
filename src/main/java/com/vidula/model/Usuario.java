@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 public class Usuario implements Serializable {
@@ -54,6 +55,15 @@ public class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
-    
+
+    public void cryptoPass() {
+        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+        setSenha(bc.encode(getSenha()));
+    }
+
+    public boolean matchPass(String senha) {
+        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+        return bc.matches(senha, getSenha());
+    }
+
 }
