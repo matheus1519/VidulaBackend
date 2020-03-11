@@ -22,7 +22,7 @@ public class VideoFileController {
     public void videoView(HttpServletRequest req,
             HttpServletResponse res,
             @PathVariable("videoname") String videoName) {
-        String path = "C:\\Users\\1519m\\Pictures\\";
+        String path = "C:\\Users\\1519m\\Videos\\";
         Path video = Paths.get(path, videoName);
 
         if (Files.exists(video)) {
@@ -41,7 +41,7 @@ public class VideoFileController {
     public static void salvarVideo(MultipartFile videoFile, Video video){
         try {
             String name = Calendar.getInstance().getTimeInMillis() + videoFile.getOriginalFilename();
-            videoFile.transferTo(Paths.get("C:\\Users\\1519m\\Pictures\\" + name));
+            videoFile.transferTo(Paths.get("C:\\Users\\1519m\\Videos\\" + name));
 //            mv.addObject("path", context.getContextPath() +"/images/"+name);
             video.setUrl("http://localhost:8080/videosview/" + name);
         } catch (Exception ex) {
