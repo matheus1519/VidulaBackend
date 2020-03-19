@@ -46,14 +46,13 @@ public class VideoController {
     }
 
     @PostMapping
-    public String post(@RequestParam("1-principal") MultipartFile video, Video videoEntity) {
-        if(video.isEmpty()){
-            return "Video não carregado!";
+    public Video post(@RequestParam("videoFile") MultipartFile videoFile, Video video) {
+        if (videoFile.isEmpty()) {
+            return null;
         }
-        
-        VideoFileController.salvarVideo(video, videoEntity);
-        videos.save(videoEntity);
-        return "Salvo com sucesso";
+        Video videoSave = videos.save(video);
+        VideoFileController.salvarVideo(videoFile,video);
+        return videoSave;
     }
 
     @DeleteMapping("/{id}")
