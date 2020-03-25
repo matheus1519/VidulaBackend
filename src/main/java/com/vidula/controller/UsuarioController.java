@@ -1,7 +1,9 @@
 package com.vidula.controller;
 
+import com.vidula.model.Permissao;
 import com.vidula.model.Usuario;
 import com.vidula.repository.UsuarioRepository;
+import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
@@ -47,6 +49,7 @@ public class UsuarioController {
 
     @PostMapping
     public boolean cadastrar(@RequestBody Usuario u) {
+        
         u.cryptoPass();
         usuarios.save(u);
         return true;

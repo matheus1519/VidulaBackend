@@ -1,11 +1,15 @@
 package com.vidula.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -23,6 +27,9 @@ public class Usuario implements Serializable {
 
     @Column(length = 200, nullable = false)
     private String senha;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Permissao> permissoes;
 
     public Long getId() {
         return id;
@@ -55,6 +62,20 @@ public class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    public List<Permissao> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(List<Permissao> permissoes) {
+//        List<Permissao> listP = new ArrayList<>();
+        Permissao p = new Permissao();
+        p.setNome("USER");
+        permissoes.add(p);
+        this.permissoes = permissoes;
+    }
+    
+    
 
     public void cryptoPass() {
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();

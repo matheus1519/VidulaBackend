@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vidula.security.JwtTokenUtil;
 import com.vidula.model.JwtRequest;
 import com.vidula.model.JwtResponse;
-import com.vidula.service.JwtUserDetailsService;
+import com.vidula.model.Usuario;
+import com.vidula.service.CustomUserDetailsService;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @CrossOrigin
-public class JwtAuthenticationController {
+public class SessionJwtController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -29,13 +31,13 @@ public class JwtAuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private JwtUserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+    @PostMapping("/sessions")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Usuario user) throws Exception {
+        authenticate(user.getEmail(), user.getSenha());
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(user.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
