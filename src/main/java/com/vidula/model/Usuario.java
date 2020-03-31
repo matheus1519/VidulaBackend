@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -68,10 +69,6 @@ public class Usuario implements Serializable {
     }
 
     public void setPermissoes(List<Permissao> permissoes) {
-//        List<Permissao> listP = new ArrayList<>();
-        Permissao p = new Permissao();
-        p.setNome("USER");
-        permissoes.add(p);
         this.permissoes = permissoes;
     }
     

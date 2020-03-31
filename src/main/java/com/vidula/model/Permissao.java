@@ -17,6 +17,13 @@ public class Permissao implements Serializable {
 
     private String nome;
 
+    public Permissao() {
+    }
+    
+    public Permissao(String nome) {
+        this.nome = nome;
+    }
+    
     public Long getId() {
         return id;
     }

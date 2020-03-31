@@ -77,19 +77,21 @@ public class UsuarioController {
             return ResponseEntity.ok(true);
         }
     }
-    
-    @PostMapping("/autenticar")
-    public boolean autenticar(@RequestBody Usuario u){
-        Optional<Usuario> uDb = usuarios.findByEmail(u.getEmail());
-        if (uDb.isPresent()){
-            if(uDb.get().matchPass(u.getSenha())){
-                return true;
-            }else{
-                return false;
-            }
-        }
-        return false;
-    }
+
+//    Movido para SessionController.class    
+//    @PostMapping("/autenticar")
+//    public boolean autenticar(@RequestBody Usuario u){
+//        Optional<Usuario> uDb = usuarios.findByEmail(u.getEmail());
+//        if (uDb.isPresent()){
+//            if(uDb.get().matchPass(u.getSenha())){
+//                return true;
+//            }else{
+//                return false;
+//            }
+//        }
+//        return false;
+//    } 
+
     
     
 

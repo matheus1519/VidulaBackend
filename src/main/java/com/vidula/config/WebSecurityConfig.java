@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 // Não cheque essas requisições
                 .authorizeRequests()
-                .antMatchers("/sessions").permitAll()
+                .antMatchers("/sessions","/usuarios/existe/**", "/videofile/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/usuarios").permitAll()
                 // Qualquer outra requisição deve ser checada
                 .anyRequest().authenticated().and().

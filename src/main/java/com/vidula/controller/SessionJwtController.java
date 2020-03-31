@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vidula.security.JwtTokenUtil;
-import com.vidula.model.JwtRequest;
 import com.vidula.model.JwtResponse;
 import com.vidula.model.Usuario;
+import com.vidula.repository.UsuarioRepository;
 import com.vidula.service.CustomUserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -32,6 +32,9 @@ public class SessionJwtController {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    
+    @Autowired
+    private UsuarioRepository usuarios;
 
     @PostMapping("/sessions")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Usuario user) throws Exception {
@@ -39,7 +42,8 @@ public class SessionJwtController {
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(user.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        user.setNome(usuarios.findByEmail(user.getEmail()).get().getNome());
+        return ResponseEntity.ok(new JwtResponse(token,user.getNome()));
     }
 
     private void authenticate(String username, String password) throws Exception {

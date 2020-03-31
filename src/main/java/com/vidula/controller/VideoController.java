@@ -37,7 +37,7 @@ public class VideoController {
     }
 
     @PutMapping("/{id}")
-    public boolean put(@PathVariable Long id, @RequestBody Video v) {
+    public boolean alterar(@PathVariable Long id, @RequestBody Video v) {
         if (videos.findById(id) != null) {
             videos.save(v);
             return true;
@@ -46,17 +46,17 @@ public class VideoController {
     }
 
     @PostMapping
-    public Video post(@RequestParam("videoFile") MultipartFile videoFile, Video video) {
+    public Video cadastrar(@RequestParam("videoFile") MultipartFile videoFile, Video video) {
         if (videoFile.isEmpty()) {
             return null;
         }
-        Video videoSave = videos.save(video);
         VideoFileController.salvarVideo(videoFile,video);
+        Video videoSave = videos.save(video);
         return videoSave;
     }
 
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Long id) {
+    public boolean deletar(@PathVariable Long id) {
         if (videos.findById(id) != null) {
             videos.deleteById(id);
             return true;
