@@ -38,7 +38,15 @@ public class VideoController {
 
     @PutMapping("/{id}")
     public boolean alterar(@PathVariable Long id, @RequestBody Video v) {
-        if (videos.findById(id) != null) {
+        Optional<Video> videoDb = videos.findById(id);
+        if (videoDb.isPresent() || id == v.getId()) {
+//            if (v.getUrl() == null) {
+//                v.setNome(videoDb.get().getNome());
+//                v.setUrl(videoDb.get().getUrl());
+//                v.setDetalhe(videoDb.get().getDetalhe());
+//                v.setProximo(videoDb.get().getProximo());
+//
+//            }
             videos.save(v);
             return true;
         }
@@ -50,7 +58,7 @@ public class VideoController {
         if (videoFile.isEmpty()) {
             return null;
         }
-        VideoFileController.salvarVideo(videoFile,video);
+        VideoFileController.salvarVideo(videoFile, video);
         Video videoSave = videos.save(video);
         return videoSave;
     }

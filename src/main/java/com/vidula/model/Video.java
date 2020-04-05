@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Video implements Serializable {
@@ -16,11 +17,13 @@ public class Video implements Serializable {
 
     @Column(length = 100)
     private String nome;
-   
+
     private String url;
-    
+
+    @OneToOne
     private Video proximo;
-    
+
+    @OneToOne
     private Video detalhe;
 
     public Long getId() {
@@ -63,5 +66,4 @@ public class Video implements Serializable {
         this.detalhe = detalhe;
     }
 
-    
 }
