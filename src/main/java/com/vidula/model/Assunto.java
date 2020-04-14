@@ -33,7 +33,7 @@ public class Assunto implements Serializable {
         return disciplina;
     }
 
-    public void setDisciplica(Disciplina disciplina) {
+    public void setDisciplina(Disciplina disciplina) {
         this.disciplina = disciplina;
     }
 
