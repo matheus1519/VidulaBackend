@@ -51,7 +51,7 @@ public class VideoFileController {
         try {
             String name = Calendar.getInstance().getTimeInMillis() + videoFile.getOriginalFilename();
             videoFile.transferTo(Paths.get("C:\\Users\\1519m\\Videos\\" + name));
-            videoEntity.setUrl("http://localhost:8080/videofile/" + name);
+            videoEntity.setUrl("http://190.180.171.49:8080/videofile/" + name);
         } catch (Exception ex) {
             System.out.println(ex);
         }

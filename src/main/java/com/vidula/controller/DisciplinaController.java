@@ -44,9 +44,9 @@ public class DisciplinaController {
     }
 
     @PostMapping
-    public boolean post(@RequestBody Disciplina v) {
-        disciplinas.save(v);
-        return true;
+    public Disciplina post(@RequestBody Disciplina v) {
+        Disciplina disc = disciplinas.save(v);
+        return disc;
     }
 
     @DeleteMapping("/{id}")
