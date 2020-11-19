@@ -25,6 +25,9 @@ public class Video implements Serializable {
 
     @OneToOne
     private Video detalhe;
+    
+    @OneToOne
+    private Teste teste;
 
     public Long getId() {
         return id;
@@ -65,5 +68,15 @@ public class Video implements Serializable {
     public void setDetalhe(Video detalhe) {
         this.detalhe = detalhe;
     }
+
+    public Teste getTeste() {
+        return teste;
+    }
+
+    public void setTeste(Teste teste) {
+        this.teste = teste;
+    }
+    
+    
 
 }

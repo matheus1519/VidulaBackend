@@ -46,16 +46,15 @@ public class VideoFileController {
         }
     }
 
-    public static void salvarVideo(MultipartFile videoFile, Video videoEntity) {
-        
-        try {
+    public static String salvarVideo(MultipartFile videoFile) {
+         try {
             String name = Calendar.getInstance().getTimeInMillis() + videoFile.getOriginalFilename();
             videoFile.transferTo(Paths.get("C:\\Users\\1519m\\Videos\\" + name));
-            videoEntity.setUrl("http://190.180.171.49:8080/videofile/" + name);
+            return "http://localhost:8080/videofile/" + name;
         } catch (Exception ex) {
             System.out.println(ex);
         }
-
+        return "";
     }
 
 }

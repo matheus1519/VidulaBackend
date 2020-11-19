@@ -1,6 +1,6 @@
 package com.vidula.controller;
 
-import com.vidula.model.Permissao;
+import com.vidula.DTO.UsuarioDTO;
 import com.vidula.model.Usuario;
 import com.vidula.repository.UsuarioRepository;
 import java.util.ArrayList;
@@ -29,13 +29,21 @@ public class UsuarioController {
     private UsuarioRepository usuarios;
 
     @GetMapping()
-    public List<Usuario> listar() {
-        return usuarios.findAll();
+    public List<UsuarioDTO> listar() {
+        List<Usuario> allUsers =  usuarios.findAll();
+        List<UsuarioDTO> usersDTO =  new ArrayList<>();
+
+        allUsers.forEach((u) -> {
+            usersDTO.add(new UsuarioDTO(u.getId(), u.getNome(), u.getEmail(), u.getLevelAccess()));
+        });
+        
+        return usersDTO;
     }
 
     @GetMapping("/{id}")
-    public Optional<Usuario> listarUm(@PathVariable Long id) {
-        return usuarios.findById(id);
+    public UsuarioDTO listarUm(@PathVariable Long id) {
+        Optional<Usuario> user =  usuarios.findById(id);
+        return new UsuarioDTO(user.get().getId(), user.get().getNome(), user.get().getEmail(), user.get().getLevelAccess());
     }
 
     @PutMapping("/{id}")

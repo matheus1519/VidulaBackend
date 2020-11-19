@@ -21,6 +21,10 @@ public class Assunto implements Serializable {
     private Long id;
     
     private String nome;
+    
+    private String status;
+
+    private Long visualizacoes;
 
     @OneToOne
     private Video inicio;
@@ -61,5 +65,22 @@ public class Assunto implements Serializable {
     public void setInicio(Video inicio) {
         this.inicio = inicio;
     }
+    
+     public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getVisualizacoes() {
+        return visualizacoes;
+    }
+
+    public void setVisualizacoes(Long visualizacoes) {
+        this.visualizacoes = visualizacoes;
+    }
+    
 
 }

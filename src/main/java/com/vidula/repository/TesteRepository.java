@@ -1,10 +1,10 @@
 package com.vidula.repository;
 
-import com.vidula.model.Permissao;
+import com.vidula.model.Teste;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PermissaoRepository extends JpaRepository<Permissao, Long>{
-    public Permissao findByNome(String name);
+public interface TesteRepository extends JpaRepository<Teste, Long>{
+    
 }

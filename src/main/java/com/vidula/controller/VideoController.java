@@ -1,6 +1,7 @@
 package com.vidula.controller;
 
 import com.vidula.model.Video;
+import com.vidula.util.VideoUrl;
 import com.vidula.repository.VideoRepository;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,14 +54,21 @@ public class VideoController {
         return false;
     }
 
-    @PostMapping
-    public Video cadastrar(@RequestParam("videoFile") MultipartFile videoFile, Video video) {
+    @PostMapping("/send")
+    public VideoUrl cadastrarVideo(@RequestParam("videoFile") MultipartFile videoFile) {
         if (videoFile.isEmpty()) {
             return null;
         }
-        VideoFileController.salvarVideo(videoFile, video);
-        Video videoSave = videos.save(video);
-        return videoSave;
+        String url = VideoFileController.salvarVideo(videoFile);
+        Video videoData = new Video();
+        videoData = videos.save(videoData);
+        
+        return new VideoUrl(url, videoData.getId());
+    }
+    
+    @PostMapping
+    public Video cadastrar(@RequestBody Video video) {
+        return videos.save(video);
     }
 
     @DeleteMapping("/{id}")

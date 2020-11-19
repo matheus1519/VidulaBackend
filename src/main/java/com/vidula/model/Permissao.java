@@ -19,7 +19,7 @@ public class Permissao implements Serializable {
 
     public Permissao() {
     }
-    
+
     public Permissao(String nome) {
         this.nome = nome;
     }
