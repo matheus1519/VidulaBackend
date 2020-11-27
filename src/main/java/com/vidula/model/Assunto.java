@@ -3,6 +3,7 @@ package com.vidula.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 public class Assunto implements Serializable {
@@ -19,17 +23,15 @@ public class Assunto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    private String nome;
-    
-    private String status;
 
-    private Long visualizacoes;
+    private String nome;
+
+    private String status;
 
     @OneToOne
     private Video inicio;
-    
-    @ManyToOne(fetch=FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private Disciplina disciplina;
 
@@ -40,7 +42,6 @@ public class Assunto implements Serializable {
     public void setDisciplina(Disciplina disciplina) {
         this.disciplina = disciplina;
     }
-
 
     public String getNome() {
         return nome;
@@ -65,8 +66,8 @@ public class Assunto implements Serializable {
     public void setInicio(Video inicio) {
         this.inicio = inicio;
     }
-    
-     public String getStatus() {
+
+    public String getStatus() {
         return status;
     }
 
@@ -74,13 +75,9 @@ public class Assunto implements Serializable {
         this.status = status;
     }
 
-    public Long getVisualizacoes() {
-        return visualizacoes;
+    @PrePersist
+    public void addInitialFieldsValue() {
+        this.status = "pending";
     }
-
-    public void setVisualizacoes(Long visualizacoes) {
-        this.visualizacoes = visualizacoes;
-    }
-    
 
 }

@@ -1,5 +1,6 @@
 package com.vidula.controller;
 
+import com.vidula.DTO.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import com.vidula.model.JwtResponse;
 import com.vidula.model.Usuario;
 import com.vidula.repository.UsuarioRepository;
 import com.vidula.service.CustomUserDetailsService;
+import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
@@ -32,7 +34,7 @@ public class SessionJwtController {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
-    
+
     @Autowired
     private UsuarioRepository usuarios;
 
@@ -42,8 +44,14 @@ public class SessionJwtController {
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(user.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        user.setNome(usuarios.findByEmail(user.getEmail()).get().getNome());
-        return ResponseEntity.ok(new JwtResponse(token,user.getNome()));
+
+        Optional<Usuario> allInfoUser = usuarios.findByEmail(user.getEmail());
+
+        return ResponseEntity.ok(
+                new JwtResponse(token,
+                        new UsuarioDTO(allInfoUser.get().getId(), allInfoUser.get().getNome(), allInfoUser.get().getEmail(), allInfoUser.get().getLevelAccess())
+                ));
+
     }
 
     private void authenticate(String username, String password) throws Exception {

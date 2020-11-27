@@ -1,31 +1,30 @@
 package com.vidula.model;
 
+import com.vidula.DTO.UsuarioDTO;
 import java.io.Serializable;
 
 public class JwtResponse implements Serializable {
 
     private static final long serialVersionUID = -8091879091924046844L;
     private final String jwttoken;
-    private String nome;
+    private UsuarioDTO user;
 
-    public JwtResponse(String jwttoken, String nome) {
+    public JwtResponse(String jwttoken, UsuarioDTO user) {
         this.jwttoken = jwttoken;
-        this.nome = nome;
-        
+        this.user = user;
+
     }
 
     public String getToken() {
         return this.jwttoken;
     }
 
-    public String getNome() {
-        return nome;
+    public UsuarioDTO getUser() {
+        return user;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUser(UsuarioDTO user) {
+        this.user = user;
     }
 
-   
-    
 }
