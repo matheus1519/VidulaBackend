@@ -1,8 +1,7 @@
 package com.vidula.controller;
 
-import com.vidula.DTO.UsuarioDTO;
-import com.vidula.model.Usuario;
-import com.vidula.repository.UsuarioRepository;
+import com.vidula.DTO.PersonDTO;
+import com.vidula.model.Person;
 import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,53 +19,78 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
+import com.vidula.repository.PersonRepository;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
+@RequestMapping("/users")
+public class PersonController {
 
     @Autowired
-    private UsuarioRepository usuarios;
+    private PersonRepository users;
 
     @GetMapping()
-    public List<UsuarioDTO> listar() {
-        List<Usuario> allUsers =  usuarios.findAll();
-        List<UsuarioDTO> usersDTO =  new ArrayList<>();
+    public List<PersonDTO> listar() {
+        List<Person> allUsers = users.findAll();
+        List<PersonDTO> usersDTO = new ArrayList<>();
 
         allUsers.forEach((u) -> {
-            usersDTO.add(new UsuarioDTO(u.getId(), u.getNome(), u.getEmail(), u.getLevelAccess()));
+            usersDTO.add(new PersonDTO(u.getId(), u.getName(), u.getEmail(), u.getLevelAccess()));
         });
-        
+
         return usersDTO;
     }
 
     @GetMapping("/{id}")
-    public UsuarioDTO listarUm(@PathVariable Long id) {
-        Optional<Usuario> user =  usuarios.findById(id);
-        return new UsuarioDTO(user.get().getId(), user.get().getNome(), user.get().getEmail(), user.get().getLevelAccess());
+    public Optional<Person> listarUm(@PathVariable Long id) {
+//        Optional<Person> user =  users.findById(id);
+//        return new PersonDTO(user.get().getId(), user.get().getName(), user.get().getEmail(), user.get().getLevelAccess());
+        return users.findById(id);
     }
 
     @PutMapping("/{id}")
-    public boolean atualizar(@PathVariable Long id, @RequestBody Usuario u) {
-        if (u.getId() == id) {
-            usuarios.save(u);
-            return true;
+    public Person atualizar(@PathVariable Long id, @RequestBody Person p) {
+        if (p.getId() == id) {
+            Person personBefore = users.findById(id).get();
+
+            if (personBefore!=null) {
+                if (p.getGender() != null) {
+                    personBefore.setGender(p.getGender());
+                }
+
+                if (p.getBirth() != null) {
+                    personBefore.setBirth(p.getBirth());
+                }
+
+                if (p.getCpf() != null) {
+                    personBefore.setCpf(p.getCpf());
+                }
+
+                if (p.getAvatarUrl() != null) {
+                    personBefore.setAvatarUrl(p.getAvatarUrl());
+                }
+                
+                return users.save(personBefore);
+                 
+            }
+
         }
-        return false;
+        return null;
+
     }
 
     @PostMapping
-    public boolean cadastrar(@RequestBody Usuario u) {
-        
+    public boolean cadastrar(@RequestBody Person u) {
+
         u.cryptoPass();
-        usuarios.save(u);
+        users.save(u);
         return true;
     }
 
     @DeleteMapping("/{id}")
     public boolean apagar(@PathVariable Long id) {
-        if (usuarios.findById(id).equals(null)) {
-            usuarios.deleteById(id);
+        if (users.findById(id).equals(null)) {
+            users.deleteById(id);
             return true;
         }
 
@@ -75,10 +99,10 @@ public class UsuarioController {
 
     @GetMapping("/existe/{email}")
     public ResponseEntity<Boolean> buscaUsuario(@PathVariable String email) {
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             return ResponseEntity.ok(false);
         }
-        Optional<Usuario> user = usuarios.findByEmail(email);
+        Optional<Person> user = users.findByEmail(email);
         if (!user.isPresent()) {
             return ResponseEntity.ok(false);
         } else {
@@ -89,7 +113,7 @@ public class UsuarioController {
 //    Movido para SessionController.class    
 //    @PostMapping("/autenticar")
 //    public boolean autenticar(@RequestBody Usuario u){
-//        Optional<Usuario> uDb = usuarios.findByEmail(u.getEmail());
+//        Optional<Usuario> uDb = users.findByEmail(u.getEmail());
 //        if (uDb.isPresent()){
 //            if(uDb.get().matchPass(u.getSenha())){
 //                return true;
@@ -99,8 +123,4 @@ public class UsuarioController {
 //        }
 //        return false;
 //    } 
-
-    
-    
-
 }

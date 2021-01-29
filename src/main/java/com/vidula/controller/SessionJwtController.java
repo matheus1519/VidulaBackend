@@ -1,6 +1,6 @@
 package com.vidula.controller;
 
-import com.vidula.DTO.UsuarioDTO;
+import com.vidula.DTO.PersonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vidula.security.JwtTokenUtil;
 import com.vidula.model.JwtResponse;
-import com.vidula.model.Usuario;
-import com.vidula.repository.UsuarioRepository;
+import com.vidula.model.Person;
 import com.vidula.service.CustomUserDetailsService;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.vidula.repository.PersonRepository;
 
 @RestController
 @CrossOrigin
@@ -36,20 +36,19 @@ public class SessionJwtController {
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private UsuarioRepository usuarios;
+    private PersonRepository usuarios;
 
     @PostMapping("/sessions")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody Usuario user) throws Exception {
-        authenticate(user.getEmail(), user.getSenha());
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Person user) throws Exception {
+        authenticate(user.getEmail(), user.getPassword());
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(user.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        Optional<Usuario> allInfoUser = usuarios.findByEmail(user.getEmail());
+        Optional<Person> allInfoUser = usuarios.findByEmail(user.getEmail());
 
-        return ResponseEntity.ok(
-                new JwtResponse(token,
-                        new UsuarioDTO(allInfoUser.get().getId(), allInfoUser.get().getNome(), allInfoUser.get().getEmail(), allInfoUser.get().getLevelAccess())
+        return ResponseEntity.ok(new JwtResponse(token,
+                        new PersonDTO(allInfoUser.get().getId(), allInfoUser.get().getName(), allInfoUser.get().getEmail(), allInfoUser.get().getLevelAccess())
                 ));
 
     }

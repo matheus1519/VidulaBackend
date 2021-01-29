@@ -1,24 +1,27 @@
 package com.vidula.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
-public class Watch implements Serializable {
+public class Comment implements Serializable {
+
+    private static final long serialVersionUID = 8399061313001636927L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String path;
+    private String doubt;
+
+    private String answer;
+
+    private int likes;
 
     @ManyToOne
     private Person user;
@@ -34,12 +37,28 @@ public class Watch implements Serializable {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public String getDoubt() {
+        return doubt;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setDoubt(String doubt) {
+        this.doubt = doubt;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 
     public Person getUser() {

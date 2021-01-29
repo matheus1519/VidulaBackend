@@ -2,8 +2,7 @@
 package com.vidula.service;
 
 import com.vidula.model.Permissao;
-import com.vidula.model.Usuario;
-import com.vidula.repository.UsuarioRepository;
+import com.vidula.model.Person;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.vidula.repository.PersonRepository;
 
 
 
@@ -27,21 +27,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     
     @Autowired
-    private UsuarioRepository usuarios;
+    private PersonRepository people;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Usuario> usuario = usuarios.findByEmail(username);
-        if(!usuario.isPresent())
+        Optional<Person> person = people.findByEmail(username);
+        if(!person.isPresent())
             throw new UsernameNotFoundException("Usuário não encontrado!");
-        return new User(usuario.get().getEmail(), usuario.get().getSenha(), authorities(usuario.get().getPermissoes()));
+        return new User(person.get().getEmail(), person.get().getPassword(), authorities(person.get().getPermits()));
     }
 
     private Collection<? extends GrantedAuthority> authorities(List<Permissao> permissoes) {
         List<GrantedAuthority> lista = new ArrayList<>();
-        for(Permissao p : permissoes){
+        permissoes.forEach((p) -> {
             lista.add(new SimpleGrantedAuthority("ROLE_"+p.getNome()));
-        }
+        });
         return lista;
     }
     

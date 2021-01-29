@@ -9,18 +9,18 @@ package com.vidula.DTO;
  *
  * @author 1519m
  */
-public class UsuarioDTO {
+public class PersonDTO {
     private Long id;
 
-    private String nome;
+    private String name;
 
     private String email;
 
     private int levelAccess;
 
-    public UsuarioDTO(Long id, String nome, String email, int levelAccess) {
+    public PersonDTO(Long id, String name, String email, int levelAccess) {
         this.id = id;
-        this.nome = nome;
+        this.name = name;
         this.email = email;
         this.levelAccess = levelAccess;
     }
@@ -33,12 +33,12 @@ public class UsuarioDTO {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
