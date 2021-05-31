@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,9 @@ public class VideoController {
 
     @Autowired
     private VideoRepository videos;
+    
+    @Value("${video.path}")
+    private String path;
 
     @GetMapping()
     public List<Video> listar() {
@@ -59,7 +63,9 @@ public class VideoController {
         if (videoFile.isEmpty()) {
             return null;
         }
-        String url = VideoFileController.salvarVideo(videoFile);
+        
+        
+        String url = VideoFileController.saveVideo(videoFile, path);
         Video videoData = new Video();
         videoData = videos.save(videoData);
         

@@ -8,7 +8,10 @@ import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +24,14 @@ public class VideoFileController {
     @Autowired
     VideoRepository videos;
 
+    @Value("${video.path}")
+	String path;
+    
     @RequestMapping("/{videoname}")
     public void videoView(HttpServletRequest req,
             HttpServletResponse res,
             @PathVariable("videoname") String videoName) {
-        String path = "C:\\Users\\1519m\\Videos\\";
+    	
         Path video = Paths.get(path, videoName);
 
         if (Files.exists(video)) {
@@ -37,14 +43,15 @@ public class VideoFileController {
             } catch (Exception ex) {
                 ex.printStackTrace();
 
-            }
+            } 
         }
     }
 
-    public static String salvarVideo(MultipartFile videoFile) {
+    public static String saveVideo(MultipartFile videoFile, String path) {
+    	
          try {
             String name = Calendar.getInstance().getTimeInMillis() + videoFile.getOriginalFilename();
-            videoFile.transferTo(Paths.get("C:\\Users\\1519m\\Videos\\" + name));
+            videoFile.transferTo(Paths.get(path + name));
             return "http://localhost:8080/videofile/" + name;
         } catch (Exception ex) {
             System.out.println(ex);
