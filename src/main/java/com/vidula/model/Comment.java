@@ -1,17 +1,21 @@
 package com.vidula.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 
 @Entity
 public class Comment implements Serializable {
-
-    private static final long serialVersionUID = 8399061313001636927L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,13 +24,16 @@ public class Comment implements Serializable {
     private String doubt;
 
     private String answer;
-
-    private int likes;
+    
+    @OneToMany(mappedBy = "comment")
+    @JsonManagedReference
+    private List<Likes> likes;
 
     @ManyToOne
-    private Person user;
+    private Person person;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Assunto subject;
 
     public Long getId() {
@@ -53,20 +60,20 @@ public class Comment implements Serializable {
         this.answer = answer;
     }
 
-    public int getLikes() {
+    public List<Likes> getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(List<Likes> likes) {
         this.likes = likes;
     }
 
-    public Person getUser() {
-        return user;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setUser(Person user) {
-        this.user = user;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public Assunto getSubject() {

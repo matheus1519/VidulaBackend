@@ -35,7 +35,7 @@ public class PersonController {
         List<PersonDTO> usersDTO = new ArrayList<>();
 
         allUsers.forEach((u) -> {
-            usersDTO.add(new PersonDTO(u.getId(), u.getName(), u.getEmail(), u.getLevelAccess()));
+            usersDTO.add(new PersonDTO(u.getId(), u.getName(), u.getEmail(), u.getLevelAccess(), u.getAvatarUrl(), u.getGender()));
         });
 
         return usersDTO;

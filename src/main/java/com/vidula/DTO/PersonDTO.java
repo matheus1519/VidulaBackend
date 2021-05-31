@@ -10,6 +10,7 @@ package com.vidula.DTO;
  * @author 1519m
  */
 public class PersonDTO {
+
     private Long id;
 
     private String name;
@@ -18,11 +19,17 @@ public class PersonDTO {
 
     private int levelAccess;
 
-    public PersonDTO(Long id, String name, String email, int levelAccess) {
+    private String avatarUrl;
+
+    private String gender;
+
+    public PersonDTO(Long id, String name, String email, int levelAccess, String avatarUrl, String gender) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.levelAccess = levelAccess;
+        this.avatarUrl = avatarUrl;
+        this.gender = gender;
     }
 
     public Long getId() {
@@ -56,6 +63,22 @@ public class PersonDTO {
     public void setLevelAccess(int levelAccess) {
         this.levelAccess = levelAccess;
     }
-    
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     
 }

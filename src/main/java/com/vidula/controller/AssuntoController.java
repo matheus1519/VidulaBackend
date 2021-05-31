@@ -1,7 +1,15 @@
 package com.vidula.controller;
 
+import com.vidula.DTO.CommentDTO;
+import com.vidula.DTO.LikesDTO;
+import com.vidula.DTO.PersonDTO;
+import com.vidula.DTO.OnlyIdDTO;
+import com.vidula.DTO.SubjectExpandedDTO;
+import com.vidula.DTO.TeacherDTO;
+import com.vidula.DTO.WatchDTO;
 import com.vidula.model.Assunto;
 import com.vidula.repository.AssuntoRepository;
+import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
@@ -25,13 +33,86 @@ public class AssuntoController {
     private AssuntoRepository assuntos;
 
     @GetMapping()
-    public List<Assunto> listar() {
-        return assuntos.findAll();
+    public List<SubjectExpandedDTO> listar() {
+        List<Assunto> allSubjects = assuntos.findAll();
+        List<SubjectExpandedDTO> allSubjectsModifieds = new ArrayList<>();
+
+        allSubjects.forEach(subject -> {
+            List<WatchDTO> watchesModifieds = new ArrayList<>();
+            List<CommentDTO> commentsModifieds = new ArrayList<>();
+            TeacherDTO teacherModified = null;
+
+            if (subject.getTeacher() != null) {
+                teacherModified = new TeacherDTO(subject.getTeacher().getId(), subject.getTeacher().getVideoUrl(), subject.getTeacher().getArea(), subject.getTeacher().getStatus(), new PersonDTO(subject.getTeacher().getPerson().getId(), subject.getTeacher().getPerson().getName(), subject.getTeacher().getPerson().getEmail(), subject.getTeacher().getPerson().getLevelAccess(), subject.getTeacher().getPerson().getAvatarUrl(), subject.getTeacher().getPerson().getGender()));
+            }
+
+            subject.getWatches().forEach(watch -> {
+                watchesModifieds.add(new WatchDTO(watch.getId(), watch.getPath(), new PersonDTO(watch.getPerson().getId(), watch.getPerson().getName(), watch.getPerson().getEmail(), watch.getPerson().getLevelAccess(), watch.getPerson().getAvatarUrl(), watch.getPerson().getGender()), new OnlyIdDTO(watch.getSubject().getId())));
+            });
+
+            subject.getComments().forEach(comment -> {
+                PersonDTO personModified = null;
+                List<LikesDTO> likesModifieds = new ArrayList<>();
+
+                if (comment.getPerson() != null) {
+                    personModified = new PersonDTO(comment.getPerson().getId(), comment.getPerson().getName(), comment.getPerson().getEmail(), comment.getPerson().getLevelAccess(), comment.getPerson().getAvatarUrl(), comment.getPerson().getGender());
+                }
+
+                if(comment.getLikes()!= null){
+                    comment.getLikes().forEach(like -> {
+                        likesModifieds.add(new LikesDTO(like.getId(), new OnlyIdDTO(like.getPerson().getId())));
+                    });
+                }
+
+                commentsModifieds.add(new CommentDTO(comment.getId(), comment.getDoubt(), comment.getAnswer(), likesModifieds, personModified));
+            });
+
+            allSubjectsModifieds.add(new SubjectExpandedDTO(subject.getId(), subject.getNome(), subject.getStatus(), subject.getInicio(), watchesModifieds, commentsModifieds, teacherModified));
+
+        });
+
+        return allSubjectsModifieds;
     }
 
     @GetMapping("/{id}")
-    public Optional<Assunto> listarUm(@PathVariable Long id) {
-        return assuntos.findById(id);
+    public SubjectExpandedDTO listarUm(@PathVariable Long id) {
+        Optional<Assunto> subjectOpt = assuntos.findById(id);
+        SubjectExpandedDTO subjectModified = null;
+
+        if (subjectOpt.isPresent()) {
+            Assunto subject = subjectOpt.get();
+
+            List<WatchDTO> watchesModifieds = new ArrayList<>();
+            List<CommentDTO> commentsModifieds = new ArrayList<>();
+            TeacherDTO teacherModified = null;
+
+            if (subject.getTeacher() != null) {
+                teacherModified = new TeacherDTO(subject.getTeacher().getId(), subject.getTeacher().getVideoUrl(), subject.getTeacher().getArea(), subject.getTeacher().getStatus(), new PersonDTO(subject.getTeacher().getPerson().getId(), subject.getTeacher().getPerson().getName(), subject.getTeacher().getPerson().getEmail(), subject.getTeacher().getPerson().getLevelAccess(), subject.getTeacher().getPerson().getAvatarUrl(), subject.getTeacher().getPerson().getGender()));
+            }
+
+            subject.getWatches().forEach(watch -> {
+                watchesModifieds.add(new WatchDTO(watch.getId(), watch.getPath(), new PersonDTO(watch.getPerson().getId(), watch.getPerson().getName(), watch.getPerson().getEmail(), watch.getPerson().getLevelAccess(), watch.getPerson().getAvatarUrl(), watch.getPerson().getGender()), new OnlyIdDTO(watch.getSubject().getId())));
+            });
+
+            subject.getComments().forEach(comment -> {
+                PersonDTO personModified = null;
+                List<LikesDTO> likesModifieds = null;
+
+                if (comment.getPerson() != null) {
+                    personModified = new PersonDTO(comment.getPerson().getId(), comment.getPerson().getName(), comment.getPerson().getEmail(), comment.getPerson().getLevelAccess(), comment.getPerson().getAvatarUrl(), comment.getPerson().getGender());
+                }
+
+                comment.getLikes().forEach(like -> {
+                    likesModifieds.add(new LikesDTO(like.getId(), new OnlyIdDTO(like.getPerson().getId())));
+                });
+
+                commentsModifieds.add(new CommentDTO(comment.getId(), comment.getDoubt(), comment.getAnswer(), likesModifieds, personModified));
+            });
+
+            subjectModified = new SubjectExpandedDTO(subject.getId(), subject.getNome(), subject.getStatus(), subject.getInicio(), watchesModifieds, commentsModifieds, teacherModified);
+        }
+
+        return subjectModified;
     }
 
     @PutMapping("/{id}")

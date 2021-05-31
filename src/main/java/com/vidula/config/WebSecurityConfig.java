@@ -48,23 +48,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    // @Override
-    // protected void configure(HttpSecurity httpSecurity) throws Exception {
-    // httpSecurity.csrf().disable()
-    // // Não cheque essas requisições
-    // .authorizeRequests().antMatchers("/sessions", "/usuarios/existe/**",
-    // "/videofile/**").permitAll()
-    // .antMatchers(HttpMethod.POST, "/usuarios").permitAll()
-    // // Qualquer outra requisição deve ser checada
-    // .anyRequest().authenticated().and().exceptionHandling()
-    // .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-    // .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    // httpSecurity.addFilterBefore(jwtRequestFilter,
-    // UsernamePasswordAuthenticationFilter.class);
-    // }
-
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated();
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf().disable()
+                // Não cheque essas requisições
+                .authorizeRequests().antMatchers("/sessions", "/users/existe/**",
+                        "/videofile/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/users").permitAll()
+                // Qualquer outra requisição deve ser checada
+                .anyRequest().authenticated().and().exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtRequestFilter,
+                UsernamePasswordAuthenticationFilter.class);
     }
+
 }

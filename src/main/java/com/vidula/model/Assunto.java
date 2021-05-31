@@ -1,6 +1,7 @@
 package com.vidula.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
@@ -31,10 +32,12 @@ public class Assunto implements Serializable {
     @JsonBackReference
     private Disciplina disciplina;
 
-    @OneToMany
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Watch> watches;
 
-    @OneToMany
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Comment> comments;
 
     @OneToOne

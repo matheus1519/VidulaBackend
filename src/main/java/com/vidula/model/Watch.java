@@ -1,7 +1,10 @@
 package com.vidula.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,9 +24,10 @@ public class Watch implements Serializable {
     private String path;
 
     @ManyToOne
-    private Person user;
+    private Person person;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Assunto subject;
 
     public Long getId() {
@@ -42,12 +46,12 @@ public class Watch implements Serializable {
         this.path = path;
     }
 
-    public Person getUser() {
-        return user;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setUser(Person user) {
-        this.user = user;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public Assunto getSubject() {

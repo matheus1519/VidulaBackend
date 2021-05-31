@@ -48,8 +48,8 @@ public class SessionJwtController {
         Optional<Person> allInfoUser = usuarios.findByEmail(user.getEmail());
 
         return ResponseEntity.ok(new JwtResponse(token,
-                        new PersonDTO(allInfoUser.get().getId(), allInfoUser.get().getName(), allInfoUser.get().getEmail(), allInfoUser.get().getLevelAccess())
-                ));
+                        new PersonDTO(allInfoUser.get().getId(), allInfoUser.get().getName(), allInfoUser.get().getEmail(), allInfoUser.get().getLevelAccess(), allInfoUser.get().getAvatarUrl(), allInfoUser.get().getGender())
+                    ));
 
     }
 
