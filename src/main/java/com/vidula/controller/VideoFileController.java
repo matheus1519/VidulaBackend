@@ -51,7 +51,7 @@ public class VideoFileController {
         try {
             String name = Calendar.getInstance().getTimeInMillis() + videoFile.getOriginalFilename();
             videoFile.transferTo(Paths.get(path + name));
-            return "http://152.67.45.159:8080/videofile/" + name;
+            return "https://vidula-backend.tk/videofile/" + name;
         } catch (Exception ex) {
             System.out.println(ex);
         }
